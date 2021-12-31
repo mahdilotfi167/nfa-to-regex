@@ -17,7 +17,6 @@
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
-    "@mui/material": "^5.2.6",
     "@monaco-editor/react": "^4.3.1",
     "d3": "^7.2.1",
     "js-yaml": "^4.1.0",

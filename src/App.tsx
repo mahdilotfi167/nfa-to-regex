@@ -1,40 +1,37 @@
 import Editor from '@monaco-editor/react';
 import './assets/css/style.css';
 import yaml from 'js-yaml';
-import {Component, useState} from "react";
+import {Component} from "react";
 import NFAView from "./components/nfa-view";
-import NFA, {structNFA} from "./logic/nfa";
-import {Container, Row} from "react-bootstrap";
+import {Alert, Button, Container, Row} from "react-bootstrap";
 import { Col } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Alert, AlertTitle, Button} from "@mui/material";
+import {Automation, GNFA} from "./logic/automata";
 
 const initialCode = `# NFA to regex converter
 
-# define states
 states:
-    q0:
+    1:
         a:
-            - q1
-            - q2
-        $:
-            - q1
-    q1:
+            - 2
         b:
-            - q2
-    q2:
+            - 3
+    2:
         a:
-            - q2
+            - 1
         b:
-            - q2
-
-# define start and accept states
-start: q0
+            - 2
+    3:
+        a:
+            - 2
+        b:
+            - 1
+start: 1
 accept:
-    - q1
-    - q2`;
+    - 2
+    - 3`;
 
-export class App extends Component<{}, {err?: string, nfa: NFA}> {
+export class App extends Component<{}, {err?: string, nfa: GNFA}> {
     private code: string;
 
     constructor(props: any) {
@@ -48,9 +45,9 @@ export class App extends Component<{}, {err?: string, nfa: NFA}> {
 
     private onSimulation = () => {
         try {
-            const rawNFA = yaml.load(this.code);
-            const nfa = structNFA(rawNFA);
-            this.setState({ err: null, nfa: nfa });
+            const automation: Automation = yaml.load(this.code);
+            const nfa = new GNFA(automation);
+            this.setState({ err: null, nfa });
         } catch (e) {
             this.setState({ err: e.message, nfa: null });
         }
@@ -62,11 +59,11 @@ export class App extends Component<{}, {err?: string, nfa: NFA}> {
                 <Container fluid>
                     <Row>
                         <Col md={6} sm={12} className={'d-flex flex-column'}>
-                            {this.state.err && <Alert severity={"error"} className={'p-1'}>
-                                <AlertTitle>Error</AlertTitle>
+                            {this.state.err && <Alert variant={"danger"} className={'px-3 py-2'}>
+                                <Alert.Heading>Error</Alert.Heading>
                                 <pre>{this.state.err}</pre>
                             </Alert>}
-                            <Button sx={{my: 2}} variant={"contained"} color={"success"} onClick={this.onSimulation}>convert</Button>
+                            <Button variant={"success"} onClick={this.onSimulation}>convert</Button>
                             {this.state.nfa && <NFAView nfa={this.state.nfa}/>}
                         </Col>
                         <Col md={6} sm={6}>

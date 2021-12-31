@@ -4,7 +4,7 @@
  * *: one or more
  * $: epsilon
  */
-interface Expression {
+export default interface Expression {
     evaluate(): string;
 }
 
@@ -19,7 +19,7 @@ class Star implements Expression {
         const expression = this.expression.evaluate();
         if (expression === '$')
             return '$';
-        return "(" + expression + ")*";
+        return expression + "*";
     }
 }
 
@@ -70,3 +70,5 @@ class Literal implements Expression {
         return this.value;
     }
 }
+
+export { Star, Or, Concatenation, Literal };
