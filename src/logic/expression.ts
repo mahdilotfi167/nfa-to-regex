@@ -19,7 +19,9 @@ class Star implements Expression {
         const expression = this.expression.evaluate();
         if (expression === '$')
             return '$';
-        return expression + "*";
+        if (this.expression instanceof Literal)
+            return expression + "*";
+        return "(" + expression + ")*";
     }
 }
 
@@ -35,7 +37,7 @@ class Or implements Expression {
     evaluate(): string {
         const left = this.left.evaluate();
         const right = this.right.evaluate();
-        return "(" + left + "+" + right + ")";
+        return left + "+" + right;
     }
 }
 
@@ -51,6 +53,10 @@ class Concatenation implements Expression {
     evaluate(): string {
         let left = this.left.evaluate();
         let right = this.right.evaluate();
+        if (this.left instanceof Or)
+            left = "(" + left + ")";
+        if (this.right instanceof Or)
+            right = "(" + right + ")";
         if (left === '$') left = '';
         if (right === '$') right = '';
         return left + right || '$';
