@@ -82,7 +82,7 @@ export class App extends Component<{}, {err?: string, nfa: NFA}> {
                                     },
                                     fontSize: 15,
                                     fontLigatures: true,
-                                    fontFamily: "Cascadia Code",
+                                    fontFamily: "cascadia",
                                     autoIndent: "advanced",
                                     automaticLayout: true,
                                     wordWrap: "on",
