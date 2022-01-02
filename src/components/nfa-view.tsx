@@ -14,7 +14,7 @@ export default class NFAView extends Component<NFAViewProps, NFAViewState> {
     render() {
         return (<>
             <Editor
-                height="10vh"
+                height="6vh"
                 defaultLanguage="typescript"
                 defaultValue={this.props.nfa.getRegex()}
                 theme="vs-dark"
@@ -22,9 +22,9 @@ export default class NFAView extends Component<NFAViewProps, NFAViewState> {
                     minimap: {
                         enabled: false
                     },
-                    fontSize: 18,
+                    fontSize: 20,
                     fontLigatures: true,
-                    fontFamily: "Cascadia Code",
+                    fontFamily: "cascadia",
                     autoIndent: "advanced",
                     automaticLayout: true,
                     wordWrap: "off",

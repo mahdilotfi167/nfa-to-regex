@@ -1,5 +1,4 @@
 import Expression, {Literal, Or, Star, Concatenation} from './expression';
-import {map} from "d3";
 
 export interface Automation {
     start: string;

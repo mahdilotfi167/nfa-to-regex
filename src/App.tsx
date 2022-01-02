@@ -58,15 +58,15 @@ export class App extends Component<{}, {err?: string, nfa: GNFA}> {
             <>
                 <Container fluid>
                     <Row>
-                        <Col md={6} sm={12} className={'d-flex flex-column'}>
+                        <Col lg={6} sm={12} xs={12} className={'d-flex flex-column'}>
                             {this.state.err && <Alert variant={"danger"} className={'px-3 py-2'}>
                                 <Alert.Heading>Error</Alert.Heading>
                                 <pre>{this.state.err}</pre>
                             </Alert>}
-                            <Button variant={"success"} onClick={this.onSimulation}>convert</Button>
+                            <Button variant={"success"} size={"lg"} onClick={this.onSimulation}>convert</Button>
                             {this.state.nfa && <NFAView nfa={this.state.nfa}/>}
                         </Col>
-                        <Col md={6} sm={6}>
+                        <Col lg={6} sm={12} xs={12}>
                             <Editor
                                 height="90vh"
                                 defaultLanguage="yaml"
@@ -77,7 +77,7 @@ export class App extends Component<{}, {err?: string, nfa: GNFA}> {
                                     minimap: {
                                         enabled: false
                                     },
-                                    fontSize: 15,
+                                    fontSize: 18,
                                     fontLigatures: true,
                                     fontFamily: "cascadia",
                                     autoIndent: "advanced",
