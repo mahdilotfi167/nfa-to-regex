@@ -108,18 +108,14 @@ export class GNFA extends NFA {
                 const sts = this._pathMap[state][state];
                 let otherPath: Expression;
                 if (fts && stt) {
-                    if (sts)
-                        otherPath = new Concatenation(new Concatenation(fts, new Star(sts)), stt)
-                    else
-                        otherPath = new Concatenation(fts, stt);
+                    otherPath = fts;
+                    if (sts) otherPath = new Concatenation(otherPath, new Star(sts));
+                    otherPath = new Concatenation(otherPath, stt);
                 }
-                if (otherPath)
-                    if (directPath)
-                        newPathMap[from][to] = new Or(otherPath, directPath);
-                    else
-                        newPathMap[from][to] = otherPath;
+                if (otherPath && directPath)
+                    newPathMap[from][to] = new Or(otherPath, directPath);
                 else
-                    newPathMap[from][to] = directPath;
+                    newPathMap[from][to] = otherPath || directPath;
             }
         }
         this._pathMap = newPathMap;
