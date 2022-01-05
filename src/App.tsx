@@ -1,5 +1,4 @@
 import Editor from '@monaco-editor/react';
-import './assets/css/style.css';
 import yaml from 'js-yaml';
 import {Component} from "react";
 import NFAView from "./components/nfa-view";
@@ -53,22 +52,26 @@ export class App extends Component<{}, {err?: string, nfa: GNFA}> {
         }
     }
 
+    private setErr = (err: string) => {
+        this.setState({ err });
+    }
+
     render() {
         return (
             <>
                 <Container fluid>
                     <Row>
-                        <Col lg={6} sm={12} xs={12} className={'d-flex flex-column'}>
+                        <Col lg={6} sm={12} xs={12} className={'d-flex flex-column align-items-stretch'}>
                             {this.state.err && <Alert variant={"danger"} className={'px-3 py-2'}>
                                 <Alert.Heading>Error</Alert.Heading>
                                 <pre>{this.state.err}</pre>
                             </Alert>}
-                            <Button variant={"success"} size={"lg"} onClick={this.onSimulation}>convert</Button>
-                            {this.state.nfa && <NFAView nfa={this.state.nfa}/>}
+                            <Button variant={"success"} size={"lg"} onClick={this.onSimulation}>load</Button>
+                            {this.state.nfa && <NFAView gnfa={this.state.nfa} setError={this.setErr} />}
                         </Col>
                         <Col lg={6} sm={12} xs={12}>
                             <Editor
-                                height="90vh"
+                                height="100vh"
                                 defaultLanguage="yaml"
                                 defaultValue={initialCode}
                                 onChange={(c) => this.code = c}

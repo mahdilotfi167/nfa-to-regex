@@ -1,4 +1,5 @@
 import Expression, {Literal, Or, Star, Concatenation} from './expression';
+import Graph from "../typings/graph";
 
 export interface Automation {
     start: string;
@@ -62,13 +63,19 @@ export class NFA extends Automata {
 }
 
 export class GNFA extends NFA {
-    private ripped: boolean;
+    private states: string[];
     private _pathMap: {
         [key: string]: {
             [key: string]: Expression;
         };
     };
 
+    /**
+     * returns a map from given keys
+     * all values are undefined
+     * @param keys keys to map
+     * @private
+     */
     private static mapFromKeys(keys: string[]) {
         const map = {};
         for (const key of keys)
@@ -79,6 +86,7 @@ export class GNFA extends NFA {
     private generatePathMap() {
         this._pathMap = {};
         for (const from in this._automation.states) {
+            const states = this.getStates();
             this._pathMap[from] = {...GNFA.mapFromKeys(this.getStates())};
             for (const char in this._automation.states[from]) {
                 this._automation.states[from][char].forEach(to => {
@@ -92,16 +100,24 @@ export class GNFA extends NFA {
         }
     }
 
-    getStates(): string[] {
-        return Object.keys(this._pathMap);
+    public getPureStates(): string[] {
+        return this.getStates().filter(s => s !== '@' && s !== '#');
+    }
+
+    public getStates(): string[] {
+        return this.states;
     }
 
     public ripState(state: string) {
         const newPathMap = {};
-        const newStates = this.getStates().filter(s => s !== state);
-        for (const from of newStates) {
-            newPathMap[from] = {...GNFA.mapFromKeys(newStates)};
-            for (const to of newStates) {
+        if (!(state in this._pathMap))
+            throw new Error(`${state} is not a valid state`);
+        if (state === '@' || state === '#')
+            throw new Error(`start and accept states cannot be ripped`);
+        this.states = this.getStates().filter(s => s !== state);
+        for (const from of this.states) {
+            newPathMap[from] = {...GNFA.mapFromKeys(this.states)};
+            for (const to of this.states) {
                 const directPath = this._pathMap[from][to];
                 const fts = this._pathMap[from][state];
                 const stt = this._pathMap[state][to];
@@ -134,17 +150,32 @@ export class GNFA extends NFA {
     constructor(automation: Automation) {
         super(automation);
         this.convertAutomataToGNFA();
+        this.states = Object.keys(this._automation.states);
         this.generatePathMap();
     }
 
-    public ripAllStates() {
-        this.getStates().filter(s => s !== '@' && s !== '#').forEach(s => this.ripState(s));
-        this.ripped = true;
+    public getStateId(state: string) {
+        return this.getStates().indexOf(state);
     }
 
-    public getRegex() {
-        if (!this.ripped)
-            throw new Error('Automaton has not been ripped yet');
-        return this._pathMap['@']['#'].evaluate();
+    public getGraph(): Graph {
+        const res: Graph = {
+            nodes: null,
+            edges: []
+        };
+        const states = this.getStates();
+        res.nodes = states.map((s, id) => ({id, label: s}));
+        for (let from of states) {
+            for (let to of states) {
+                if (this._pathMap[from][to]) {
+                    res.edges.push({
+                        from: states.indexOf(from),
+                        to: states.indexOf(to),
+                        label: this._pathMap[from][to].evaluate()
+                    });
+                }
+            }
+        }
+        return res;
     }
 }
