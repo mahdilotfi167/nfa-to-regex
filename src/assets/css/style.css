@@ -13,3 +13,13 @@ pre {
     white-space: -o-pre-wrap;    /* Opera 7 */
     word-wrap: break-word;       /* Internet Explorer 5.5+ */
 }
+
+.btn-flat {
+    background-color: #3e065f !important;
+    color: #fff !important;
+}
+
+.btn-flat:focus {
+    outline: none !important;
+    box-shadow: #6f42c1 0 0 0 0.2rem !important;;
+}

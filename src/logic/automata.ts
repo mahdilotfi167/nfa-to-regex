@@ -64,6 +64,9 @@ export class NFA extends Automata {
 
 export class GNFA extends NFA {
     private states: string[];
+    private graphIds: {
+        [key: string]: number;
+    };
     private _pathMap: {
         [key: string]: {
             [key: string]: Expression;
@@ -151,11 +154,13 @@ export class GNFA extends NFA {
         super(automation);
         this.convertAutomataToGNFA();
         this.states = Object.keys(this._automation.states);
+        this.graphIds = {};
+        this.states.forEach((s, id) => this.graphIds[s] = id);
         this.generatePathMap();
     }
 
     public getStateId(state: string) {
-        return this.getStates().indexOf(state);
+        return this.graphIds[state];
     }
 
     public getGraph(): Graph {
@@ -164,13 +169,13 @@ export class GNFA extends NFA {
             edges: []
         };
         const states = this.getStates();
-        res.nodes = states.map((s, id) => ({id, label: s}));
+        res.nodes = states.map((s) => ({id: this.getStateId(s), label: s}));
         for (let from of states) {
             for (let to of states) {
                 if (this._pathMap[from][to]) {
                     res.edges.push({
-                        from: states.indexOf(from),
-                        to: states.indexOf(to),
+                        from: this.getStateId(from),
+                        to: this.getStateId(to),
                         label: this._pathMap[from][to].evaluate()
                     });
                 }

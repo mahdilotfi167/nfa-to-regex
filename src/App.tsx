@@ -66,7 +66,7 @@ export class App extends Component<{}, {err?: string, nfa: GNFA}> {
                                 <Alert.Heading>Error</Alert.Heading>
                                 <pre>{this.state.err}</pre>
                             </Alert>}
-                            <Button variant={"success"} size={"lg"} onClick={this.onSimulation}>load</Button>
+                            <Button variant="flat" size={"lg"} onClick={this.onSimulation}>load</Button>
                             {this.state.nfa && <NFAView gnfa={this.state.nfa} setError={this.setErr} />}
                         </Col>
                         <Col lg={6} sm={12} xs={12}>
