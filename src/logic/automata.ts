@@ -28,8 +28,8 @@ export class NFA extends Automata {
      * validate a raw structure of an NFA
      * @param nfa
      */
-    private static validateNFA(nfa: Automation){
-        if (!nfa.start) {
+    private static validateNFA(nfa: Automation) {
+        if (nfa.start === undefined || nfa.start === null) {
             throw new Error('NFA must have a start state');
         }
         if (!nfa.accept) {
@@ -48,6 +48,9 @@ export class NFA extends Automata {
         }
         for (const state in nfa.states) {
             for (const char in nfa.states[state]) {
+                if (!nfa.states[state][char]) {
+                    throw new Error(`remove unused transition from ${state} on expression ${char}`);
+                }
                 for (const next of nfa.states[state][char]) {
                     if (!nfa.states[next]) {
                         throw new Error(`${next} is not a valid state`);
@@ -56,6 +59,7 @@ export class NFA extends Automata {
             }
         }
     }
+
     constructor(automation: Automation) {
         super(automation);
         NFA.validateNFA(automation);
