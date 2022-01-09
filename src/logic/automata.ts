@@ -135,7 +135,7 @@ export class GNFA extends NFA {
                     if (sts) otherPath = new Concatenation(otherPath, new Star(sts));
                     otherPath = new Concatenation(otherPath, stt);
                 }
-                if (otherPath && directPath)
+                if (otherPath && directPath && otherPath.evaluate() != directPath.evaluate()) // TODO: implement equal for expression
                     newPathMap[from][to] = new Or(otherPath, directPath);
                 else
                     newPathMap[from][to] = otherPath || directPath;
