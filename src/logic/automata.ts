@@ -148,7 +148,7 @@ export class GNFA extends NFA {
         this._automation.states['@'] = {'$': [this._automation.start]};
         this._automation.states['#'] = {};
         for (const accept of this._automation.accept) {
-            this._automation.states[accept]['$'] = ['#'];
+            this._automation.states[accept]['$'].push('#');
         }
         this._automation.start = '@';
         this._automation.accept = ['#'];
