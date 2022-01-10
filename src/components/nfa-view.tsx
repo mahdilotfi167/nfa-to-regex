@@ -47,14 +47,26 @@ export default class NFAView extends Component<NFAViewProps, NFAViewState> {
             'warning',
             'info',
         ]
-        const unitLen = 1 / (this.props.gnfa.getPureStates().length + this.rippedStack.length) * 100;
-        for (let i = 0; i < this.rippedStack.length; i++) {
+        const totalStatesCount = this.props.gnfa.getPureStates().length + this.rippedStack.length;
+        const unitLen = 1 / totalStatesCount * 100;
+        let i = 0;
+        while (i < this.rippedStack.length) {
             res.push({
                 variant: variants[i % variants.length],
                 label: this.rippedStack[i],
                 now: unitLen,
                 key: i,
             });
+            i++;
+        }
+        while (i < totalStatesCount) {
+            res.push({
+                variant: variants[i % variants.length],
+                label: '',
+                now: 0,
+                key: i,
+            });
+            i++;
         }
         return res;
     }
