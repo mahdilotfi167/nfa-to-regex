@@ -23,3 +23,10 @@ pre {
     outline: none !important;
     box-shadow: #6f42c1 0 0 0 0.2rem !important;;
 }
+
+.states-progress-bar {
+    height: 40px !important;
+    font-family: cascadia;
+    font-size: 20px !important;
+    font-weight: bold;
+}
