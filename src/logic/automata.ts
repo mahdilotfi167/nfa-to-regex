@@ -101,7 +101,7 @@ export class GNFA extends NFA {
                     if (!this._pathMap[from][to])
                         this._pathMap[from][to] = literal;
                     else
-                        this._pathMap[from][to] = new Or(this._pathMap[from][to], literal);
+                        this._pathMap[from][to] = Or.of(this._pathMap[from][to], literal);
                 });
             }
         }
@@ -132,11 +132,11 @@ export class GNFA extends NFA {
                 let otherPath: Expression;
                 if (fts && stt) {
                     otherPath = fts;
-                    if (sts) otherPath = new Concatenation(otherPath, new Star(sts));
-                    otherPath = new Concatenation(otherPath, stt);
+                    if (sts) otherPath = Concatenation.of(otherPath, Star.of(sts));
+                    otherPath = Concatenation.of(otherPath, stt);
                 }
-                if (otherPath && directPath && otherPath.evaluate() != directPath.evaluate()) // TODO: implement equal for expression
-                    newPathMap[from][to] = new Or(otherPath, directPath);
+                if (otherPath && directPath)
+                    newPathMap[from][to] = Or.of(otherPath, directPath);
                 else
                     newPathMap[from][to] = otherPath || directPath;
             }

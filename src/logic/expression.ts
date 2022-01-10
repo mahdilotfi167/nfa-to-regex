@@ -23,6 +23,14 @@ class Star implements Expression {
             return expression + "*";
         return "(" + expression + ")*";
     }
+
+    public static of(expression: Expression): Expression {
+        if (expression.evaluate() === '$')
+            return new Literal('$');
+        if (expression instanceof Star)
+            return expression;
+        return new Star(expression);
+    }
 }
 
 class Or implements Expression {
@@ -38,6 +46,12 @@ class Or implements Expression {
         const left = this.left.evaluate();
         const right = this.right.evaluate();
         return left + "+" + right;
+    }
+
+    public static of(left: Expression, right: Expression): Expression {
+        if (left.evaluate() === right.evaluate())
+            return left;
+        return new Or(left, right);
     }
 }
 
@@ -57,9 +71,15 @@ class Concatenation implements Expression {
             left = "(" + left + ")";
         if (this.right instanceof Or)
             right = "(" + right + ")";
-        if (left === '$') left = '';
-        if (right === '$') right = '';
         return left + right || '$';
+    }
+
+    public static of(left: Expression, right: Expression): Expression {
+        if (left.evaluate() === '$')
+            return right;
+        if (right.evaluate() === '$')
+            return left;
+        return new Concatenation(left, right);
     }
 }
 
