@@ -38,11 +38,11 @@ export class NFA extends Automata {
         if (!nfa.states) {
             throw new Error('NFA must have states');
         }
-        if (!nfa.states[nfa.start]) {
+        if (!(nfa.start in nfa.states)) {
             throw new Error(`${nfa.start} is not a valid start state`);
         }
         for (const accept of nfa.accept) {
-            if (!nfa.states[accept]) {
+            if (!(accept in nfa.states)) {
                 throw new Error(`${accept} is not a valid accept state`);
             }
         }
@@ -52,7 +52,7 @@ export class NFA extends Automata {
                     throw new Error(`remove unused transition from ${state} on expression ${char}`);
                 }
                 for (const next of nfa.states[state][char]) {
-                    if (!nfa.states[next]) {
+                    if (!(next in nfa.states)) {
                         throw new Error(`${next} is not a valid state`);
                     }
                 }
@@ -148,6 +148,10 @@ export class GNFA extends NFA {
         this._automation.states['@'] = {'$': [this._automation.start]};
         this._automation.states['#'] = {};
         for (const accept of this._automation.accept) {
+            if (!this._automation.states[accept])
+                this._automation.states[accept] = {};
+            if (!this._automation.states[accept]['$'])
+                this._automation.states[accept]['$'] = [];
             this._automation.states[accept]['$'].push('#');
         }
         this._automation.start = '@';
