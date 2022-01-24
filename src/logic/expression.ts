@@ -11,7 +11,7 @@ export default interface Expression {
 class Star implements Expression {
     private expression: Expression;
 
-    constructor(expression: Expression) {
+    private constructor(expression: Expression) {
         this.expression = expression;
     }
 
@@ -37,7 +37,7 @@ class Or implements Expression {
     private left: Expression;
     private right: Expression;
 
-    constructor(left: Expression, right: Expression) {
+    private constructor(left: Expression, right: Expression) {
         this.left = left;
         this.right = right;
     }
@@ -59,7 +59,7 @@ class Concatenation implements Expression {
     private left: Expression;
     private right: Expression;
 
-    constructor(left: Expression, right: Expression) {
+    private constructor(left: Expression, right: Expression) {
         this.left = left;
         this.right = right;
     }

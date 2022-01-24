@@ -29,6 +29,12 @@ export class NFA extends Automata {
      * @param nfa
      */
     private static validateNFA(nfa: Automation) {
+        if ('@' in nfa.states) {
+            throw new Error('@ is a reserved state name');
+        }
+        if ('#' in nfa.states) {
+            throw new Error('# is a reserved state name');
+        }
         if (nfa.start === undefined || nfa.start === null) {
             throw new Error('NFA must have a start state');
         }
