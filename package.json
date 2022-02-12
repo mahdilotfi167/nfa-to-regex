@@ -2,7 +2,7 @@
   "name": "nfa-to-regex",
   "source": "src/index.html",
   "private": false,
-  "homepage": "http//mahdilotfi167.github.io/nfa-to-regex",
+  "homepage": "https://mahdilotfi167.github.io/nfa-to-regex",
   "scripts": {
     "start": "parcel",
     "build": "parcel build --public-url=./",
